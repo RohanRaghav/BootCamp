@@ -31,7 +31,7 @@ const Submission = () => {
         formData.append('Year', user.Year);
 
         try {
-            const response = await axios.post('https://boot-camp-topaz.vercel.app/upload-assessment', formData, {
+            const response = await axios.post('https://boot-camp-server-tcui.vercel.app/upload-assessment', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
