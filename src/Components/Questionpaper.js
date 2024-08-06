@@ -24,7 +24,7 @@ const QuestionPaper = () => {
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
-                const response = await axios.get('https://boot-camp-topaz.vercel.app/api/questions');
+                const response = await axios.get('https://boot-camp-server-tcui.vercel.app/api/questions');
                 setQuestions(response.data);
                 setAnswers(response.data.map(() => ''));
             } catch (error) {
