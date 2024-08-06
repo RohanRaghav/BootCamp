@@ -7,7 +7,6 @@ const QuestionPaper = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const [username, setUsername] = useState('');
     const [UID, setUID] = useState('');
-    const [PhNumber, setPhNumber] = useState('');
     const [course, setCourse] = useState('');
     const [ Department, setDepartment] = useState('');
     const [ Year, setYear] = useState('');
@@ -67,7 +66,7 @@ const QuestionPaper = () => {
             timeTaken,
         }));
 
-        const data = { username, UID, course, Department, Year, PhNumber, answers: allAnswers };
+        const data = { username, UID, course, Department, Year, answers: allAnswers };
 
         console.log('Submitting data:', JSON.stringify(data, null, 2)); // Log the data being sent
 
@@ -164,19 +163,6 @@ const QuestionPaper = () => {
                                     </select>
                                 </label>
                                 <br />
-                                <div className="ui-wrapper">
-                                    <div className="input-wrapper">
-                                        <legend>
-                                            <label htmlFor="phonenumber">
-                                                Phonenumber*
-                                            </label>
-                                        </legend>
-                                        <div className="textfield">
-                                            <input pattern="\d+" maxLength="10" id="phonenumber" type="text" value={PhNumber} onChange={(e) => setPhNumber(e.target.value)} />
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div style={{alignItems:'center'}}>
                                     <button type="submit" className='infobtn'>Submit</button>
                                 </div>
