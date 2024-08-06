@@ -24,7 +24,7 @@ const QuestionPaper = () => {
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/api/questions');
+                const response = await axios.get('https://boot-camp-server-r1kd.vercel.app/api/questions');
                 setQuestions(response.data);
                 setAnswers(response.data.map(() => ''));
             } catch (error) {
@@ -71,7 +71,7 @@ const QuestionPaper = () => {
         console.log('Submitting data:', JSON.stringify(data, null, 2)); // Log the data being sent
 
         try {
-            await axios.post('http://localhost:3001/submit-test', data);
+            await axios.post('https://boot-camp-server-r1kd.vercel.app/submit-test', data);
                 setShowFeedback(true);
 
         } catch (error) {
@@ -81,7 +81,7 @@ const QuestionPaper = () => {
 
     const handleFeedbackSubmit = async () => {
         try {
-            await axios.post('http://localhost:3001/submit-feedback', { username, UID, course, feedback, rating, Department, Year });
+            await axios.post('https://boot-camp-server-r1kd.vercel.app/submit-feedback', { username, UID, course, feedback, rating, Department, Year });
             setShowFeedback(false);
             setFeedback('');
             setRating(0);
