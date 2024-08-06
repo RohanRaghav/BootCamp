@@ -27,7 +27,7 @@ const Form = () => {
     console.log('Submitting data:', JSON.stringify(data, null, 2));
 
     try {
-      await axios.post('http://localhost:3001/submit-info', data);
+      await axios.post('https://boot-camp-server-r1kd.vercel.app/submit-info', data);
       handleSubmition();
     } catch (error) {
       console.error('Error submitting form:', error);
