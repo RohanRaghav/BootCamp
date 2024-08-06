@@ -24,7 +24,7 @@ const QuestionPaper = () => {
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
-                const response = await axios.get('http://localhost:3001/api/questions');
+                const response = await axios.get('https://cac-update.vercel.app/api/questions');
                 setQuestions(response.data);
                 setAnswers(response.data.map(() => ''));
             } catch (error) {
