@@ -31,7 +31,7 @@ const Submission = () => {
         formData.append('Year', user.Year);
 
         try {
-            const response = await axios.post('https://cac-update.vercel.app/upload-assessment', formData, {
+            const response = await axios.post('https://BootCamp.vercel.app/upload-assessment', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
