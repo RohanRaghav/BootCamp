@@ -20,6 +20,7 @@ const App = () => {
         <UserProvider>
             <div className={`app ${isDarkMode ? 'dark' : 'light'}`}>
                 <header>
+    <img src='Cac_logo.png' alt='logo' style={{width:150,height:150, float:'left',padding:10,zIndex:-1}} />
                     <h1 className='coloring'>Connecting all circles</h1>
                     <div className='togglepos'>
                         <label className="switch">
