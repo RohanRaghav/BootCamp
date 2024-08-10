@@ -26,8 +26,8 @@ const Submission = () => {
         formData.append('day', parseInt(day.match(/\d+/)[0], 10)); // Convert 'Day 1' to 1
 
         // Include actual user data here or handle it differently
-        formData.append('username', user.username);
-        formData.append('UID', user.UID);
+        formData.append('username', 'user.username');
+        formData.append('UID', 'user.UID');
 
         try {
             const response = await axios.post('https://boot-camp-server-r1kd.vercel.app/upload-assessment', formData, {
