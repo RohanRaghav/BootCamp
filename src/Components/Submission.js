@@ -1,12 +1,12 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { UserContext } from '../UserContext';
 
 const Submission = () => {
     console.log(sessionStorage.getItem('username'));
     console.log(sessionStorage.getItem('UID'));
     const [selectedFiles, setSelectedFiles] = useState({});
-    const { user } = useContext(UserContext);
+    const username = sessionStorage.getItem('username');
+    const UID = sessionStorage.getItem('UID');
     const handleFileChange = (e, day) => {
         const files = e.target.files;
         setSelectedFiles(prevState => ({ ...prevState, [day]: files[0] }));
@@ -26,11 +26,11 @@ const Submission = () => {
         formData.append('day', parseInt(day.match(/\d+/)[0], 10)); // Convert 'Day 1' to 1
 
         // Include actual user data here or handle it differently
-        formData.append('username', user.username);
-        formData.append('UID', user.UID);
+        formData.append('username', username);
+        formData.append('UID', UID);
 
         try {
-            const response = await axios.post('https://boot-camp-server-r1kd.vercel.app/upload-assessment', formData, {
+            const response = await axios.post('http://localhost:3001/upload-assessment', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
