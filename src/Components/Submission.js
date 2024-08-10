@@ -2,15 +2,14 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const Submission = () => {
+    console.log(sessionStorage.getItem('username'));
+    console.log(sessionStorage.getItem('UID'));
     const [selectedFiles, setSelectedFiles] = useState({});
     const username = sessionStorage.getItem('username');
     const UID = sessionStorage.getItem('UID');
-
     const handleFileChange = (e, day) => {
         const files = e.target.files;
-        if (files.length > 0) {
-            setSelectedFiles(prevState => ({ ...prevState, [day]: files[0] }));
-        }
+        setSelectedFiles(prevState => ({ ...prevState, [day]: files[0] }));
     };
 
     const handleSubmit = async (e, day) => {
@@ -25,6 +24,8 @@ const Submission = () => {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('day', parseInt(day.match(/\d+/)[0], 10)); // Convert 'Day 1' to 1
+
+        // Include actual user data here or handle it differently
         formData.append('username', username);
         formData.append('UID', UID);
 
@@ -35,10 +36,8 @@ const Submission = () => {
                 },
             });
             console.log('Assessment submitted successfully:', response.data);
-            // Optionally reset form or show success message
         } catch (error) {
             console.error('Error submitting assessment:', error.response ? error.response.data : error.message);
-            // Optionally show error message to the user
         }
     };
 
