@@ -30,7 +30,7 @@ const Submission = () => {
         formData.append('UID', UID);
 
         try {
-            const response = await axios.post('http://localhost:3001/upload-assessment', formData, {
+            const response = await axios.post('https://boot-camp-server-chi.vercel.app/upload-assessment', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
