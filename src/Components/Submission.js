@@ -3,6 +3,8 @@ import axios from 'axios';
 import { UserContext } from '../UserContext';
 
 const Submission = () => {
+    console.log(sessionStorage.getItem('username'));
+    console.log(sessionStorage.getItem('UID'));
     const [selectedFiles, setSelectedFiles] = useState({});
     const { user } = useContext(UserContext);
     const handleFileChange = (e, day) => {
@@ -26,9 +28,6 @@ const Submission = () => {
         // Include actual user data here or handle it differently
         formData.append('username', user.username);
         formData.append('UID', user.UID);
-        formData.append('course', user.course);
-        formData.append('Department', user.Department);
-        formData.append('Year', user.Year);
 
         try {
             const response = await axios.post('https://boot-camp-server-r1kd.vercel.app/upload-assessment', formData, {
@@ -48,8 +47,8 @@ const Submission = () => {
             <div className="submission-slots">
                 {['Day 1', 'Day 2', 'Day 3'].map((day, index) => (
                     <div key={index} className="submission-slot">
-                        <h3>{day} Assessment</h3>
-                        <form onSubmit={(e) => handleSubmit(e, day)}>
+                        <h3>{day} Assessments</h3>
+                        <form onSubmit={(e) => handleSubmit(e, day)} encType='multipart/form-data'>
                             <label>
                                 Upload your assessment:
                                 <input 
