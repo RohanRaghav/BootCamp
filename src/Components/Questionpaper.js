@@ -134,10 +134,11 @@ const QuestionPaper = () => {
                                     Course:
                                     <select value={course} className='input' onChange={(e) => setCourse(e.target.value)} required>
                                         <option value="">Select your course</option>
-                                        <option value="course1">Course 1</option>
-                                        <option value="course2">Course 2</option>
-                                        <option value="course3">Course 3</option>
-                                        {/* Add more options as needed */}
+                                        <option value="course1">Frontend</option>
+                                          <option value="course2">Backend</option>
+                                          <option value="course3">UI/UX</option>
+                                          <option value="course4">Trading</option>
+                                          <option value="course5">DSA</option>
                                     </select>
                                 </label>
                                 <br />
