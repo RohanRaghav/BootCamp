@@ -25,6 +25,8 @@ const Form = () => {
     const data = { username, UID, course, Department, Year, PhNumber, Email };
 
     console.log('Submitting data:', JSON.stringify(data, null, 2));
+    sessionStorage.setItem('username',username);
+    sessionStorage.setItem('UID',UID);
 
     try {
       await axios.post('https://boot-camp-server-r1kd.vercel.app/submit-info', data);
