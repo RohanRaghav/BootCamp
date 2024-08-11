@@ -11,28 +11,34 @@ const Submission = () => {
         setSelectedFiles(prevState => ({ ...prevState, [day]: files[0] }));
     };
 
-    const handleSubmit = async (e, day) => {
-        e.preventDefault();
-        const file = selectedFiles[day];
+   const handleSubmit = async (e, day) => {
+    e.preventDefault();
+    const file = selectedFiles[day];
 
-        if (!file) {
-            console.error('No file selected for upload');
-            return;
-        }
+    if (!file) {
+        console.error('No file selected for upload');
+        return;
+    }
 
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('day', parseInt(day.match(/\d+/)[0], 10)); // Convert 'Day 1' to 1
-        formData.append('username', username);
-        formData.append('UID', UID);
+    const fileName = file.name; // Extract the file name
 
-        try {
-            // Send data to backend
-            await axios.post('https://boot-camp-server-r1kd.vercel.app/upload-assessment', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+    try {
+        // Send file name to backend
+        await axios.post('https://boot-camp-server-r1kd.vercel.app/save-filename', {
+            fileName,
+            day,
+            username,
+            UID,
+        });
+
+        // Redirect to Google Drive after successful submission
+        const driveLink = `https://drive.google.com/drive/folders/1I0ccrAIlhMQlb3JFqfREM0SF3offvSrS?usp=sharing`;
+        window.open(driveLink, '_blank');
+
+    } catch (error) {
+        console.error('Error submitting assessment:', error.response ? error.response.data : error.message);
+    }
+};
 
             // Redirect to Google Drive after successful submission
             const driveLink = `https://drive.google.com/drive/folders/1I0ccrAIlhMQlb3JFqfREM0SF3offvSrS?usp=sharing`;
