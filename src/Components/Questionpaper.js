@@ -150,22 +150,27 @@ const QuestionPaper = () => {
                         <div>
                             {currentQuestion ? (
                                 <div className='questionbox'>
-                                    <h2 className='questionTitle'>{currentQuestion.title}</h2>
-                                    <p className='question'>{currentQuestion.description}</p>
-                                    <div className='options'>
-                                        {[1, 2, 3, 4].map((option) => (
-                                            <label key={option}>
-                                                <input
-                                                    type="radio"
-                                                    name={`question-${currentPage}`}
-                                                    value={option}
-                                                    checked={answers[currentPage] === option.toString()}
-                                                    onChange={handleAnswerChange}
-                                                />
-                                                {currentQuestion[`option${option}`]}
-                                            </label>
-                                        ))}
-                                    </div>
+                               <h2 className='questionTitle'>{currentQuestion.title}</h2>
+                               <p className='question'>{currentQuestion.description}</p>
+                               <div className='options'>
+                                 {[1, 2, 3, 4].map((option) => (
+                                   <label 
+                                     key={option} 
+                                     className={`option-box ${answers[currentPage] === option.toString() ? 'selected' : ''}`}
+                                     onClick={() => handleAnswerChange({ target: { value: option.toString() } })}
+                                   >
+                                     <input
+                                       type="radio"
+                                       name={`question-${currentPage}`}
+                                       value={option}
+                                       checked={answers[currentPage] === option.toString()}
+                                       onChange={handleAnswerChange}
+                                       className='hidden-radio'
+                                     />
+                                     {currentQuestion[`option${option}`]}
+                                   </label>
+                                 ))}
+                               </div>                             
                                     <div className="button-container">
                                         <div className='PositioningPrevious'>
                                             <button className="button-3d" onClick={handlePrevious} disabled={currentPage === 0}>
