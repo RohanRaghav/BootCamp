@@ -2,22 +2,11 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const Submission = () => {
-    const username = sessionStorage.getItem('username');
-    const UID = sessionStorage.getItem('UID');
 
     const handleSubmit = async (e, day) => {
         e.preventDefault();
 
-        const formData = {
-            username,
-            UID,
-            day: parseInt(day.match(/\d+/)[0], 10), // Convert 'Day 1' to 1
-        };
-
         try {
-            // Send data to backend
-            await axios.post('https://boot-camp-server-chi.vercel.app/upload-assessment', formData);
-
             // Redirect to Google Drive after successful submission
             const driveLink = `https://drive.google.com/drive/folders/1I0ccrAIlhMQlb3JFqfREM0SF3offvSrS?usp=sharing`;
             window.open(driveLink, '_blank');
