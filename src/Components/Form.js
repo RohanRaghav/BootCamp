@@ -27,7 +27,11 @@ const Form = () => {
     console.log('Submitting data:', JSON.stringify(data, null, 2));
     sessionStorage.setItem('username',username);
     sessionStorage.setItem('UID',UID);
-
+    sessionStorage.setItem('Course',course);
+    sessionStorage.setItem('Department',Department);
+    sessionStorage.setItem('Year',Year);
+    sessionStorage.setItem('PhNumber',PhNumber);
+    sessionStorage.setItem('Email',Email);
     try {
       await axios.post('https://boot-camp-server-r1kd.vercel.app/submit-info', data);
       handleSubmition();
@@ -35,7 +39,6 @@ const Form = () => {
       console.error('Error submitting form:', error);
     }
   };
-
   return (
     <div className="forming">
       <div className='formhandle'>
