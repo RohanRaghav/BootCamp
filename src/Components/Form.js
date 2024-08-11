@@ -33,7 +33,7 @@ const Form = () => {
     sessionStorage.setItem('PhNumber',PhNumber);
     sessionStorage.setItem('Email',Email);
     try {
-      await axios.post('https://boot-camp-server-r1kd.vercel.app/submit-info', data);
+      await axios.post('https://boot-camp-server-chi.vercel.app/submit-info', data);
       handleSubmition();
     } catch (error) {
       console.error('Error submitting form:', error);
