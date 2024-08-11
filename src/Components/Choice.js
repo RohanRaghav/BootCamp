@@ -8,7 +8,7 @@ const Choice = () => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const response = await axios.get('https://boot-camp-server-r1kd.vercel.app/api/notifications');
+        const response = await axios.get('https://boot-camp-server-chi.vercel.app/api/notifications');
         setNotifications(response.data);
       } catch (error) {
         console.error('Error fetching notifications:', error);
