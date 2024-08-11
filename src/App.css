@@ -1351,3 +1351,7 @@ svg {
     width: 20px;  /* Even smaller width for screens 480px or less */
   }
 }
+
+.questionbox{
+position:relative;
+}
