@@ -130,12 +130,13 @@ select {
   border: 1px solid #fff;
   border-radius: 5px;
   width: 100%;
-  background-color: #FFF8F3;
+   background-color:#cacaca;
   color: #fff;
 }
 
 option{
   color: gray;
+	 background-color:#cacaca;
 }
 
 select:focus {
