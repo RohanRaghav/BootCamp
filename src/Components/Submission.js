@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import axios from 'axios';
 
 const Submission = () => {
-    console.log(sessionStorage.getItem('username'));
-    console.log(sessionStorage.getItem('UID'));
     const [selectedFiles, setSelectedFiles] = useState({});
     const username = sessionStorage.getItem('username');
     const UID = sessionStorage.getItem('UID');
+
     const handleFileChange = (e, day) => {
         const files = e.target.files;
         setSelectedFiles(prevState => ({ ...prevState, [day]: files[0] }));
@@ -24,18 +23,21 @@ const Submission = () => {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('day', parseInt(day.match(/\d+/)[0], 10)); // Convert 'Day 1' to 1
-
-        // Include actual user data here or handle it differently
         formData.append('username', username);
         formData.append('UID', UID);
 
         try {
-            const response = await axios.post('https://boot-camp-server-chi.vercel.app/upload-assessment', formData, {
+            // Send data to backend
+            await axios.post('https://boot-camp-server-r1kd.vercel.app/upload-assessment', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            console.log('Assessment submitted successfully:', response.data);
+
+            // Redirect to Google Drive after successful submission
+            const driveLink = `https://drive.google.com/drive/folders/1I0ccrAIlhMQlb3JFqfREM0SF3offvSrS?usp=sharing`;
+            window.open(driveLink, '_blank');
+
         } catch (error) {
             console.error('Error submitting assessment:', error.response ? error.response.data : error.message);
         }
@@ -57,7 +59,7 @@ const Submission = () => {
                                     onChange={(e) => handleFileChange(e, day)} 
                                 />
                             </label>
-                            <button type="submit" className="submit-btn">Submit</button>
+                            <button type="submit" className="submit-btn">Submit & Open Drive</button>
                         </form>
                     </div>
                 ))}
