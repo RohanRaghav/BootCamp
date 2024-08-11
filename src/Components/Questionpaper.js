@@ -5,28 +5,33 @@ import { useNavigate } from 'react-router-dom';
 const QuestionPaper = () => {
     const [questions, setQuestions] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
-    const [username, setUsername] = useState('');
-    const [UID, setUID] = useState('');
-    const [course, setCourse] = useState('');
-    const [ Department, setDepartment] = useState('');
-    const [ Year, setYear] = useState('');
+    const username = sessionStorage.getItem('username');
+    const UID = sessionStorage.getItem('UID');
+    const Year = sessionStorage.getItem('Year');
+    const Department = sessionStorage.getItem('Department');
+    const course = sessionStorage.getItem('course');
     const [answers, setAnswers] = useState([]);
+    const [timeTakenPerQuestion, setTimeTakenPerQuestion] = useState([]);
     const [startTime, setStartTime] = useState(new Date());
     const [showFeedback, setShowFeedback] = useState(false);
     const [feedback, setFeedback] = useState('');
     const [rating, setRating] = useState(0);
     const [submittedInfo, setSubmittedInfo] = useState(false);
+    const [totalMarks, setTotalMarks] = useState(0);
     const questionsPerPage = 1;
     const navigate = useNavigate();
-    const handleFeedbackSubmition = () => {
+
+    const handleFeedbackSubmission = () => {
         navigate('/Thanks');
     };
+
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
-                const response = await axios.get('https://boot-camp-server-chi.vercel.app/api/questions');
+                const response = await axios.get('https://boot-camp-server-r1kd.vercel.app/api/questions');
                 setQuestions(response.data);
                 setAnswers(response.data.map(() => ''));
+                setTimeTakenPerQuestion(response.data.map(() => 0));
             } catch (error) {
                 console.error('Error fetching questions:', error);
             }
@@ -59,33 +64,62 @@ const QuestionPaper = () => {
 
     const handleSubmit = async () => {
         const endTime = new Date();
-        const timeTaken = (endTime - startTime) / 1000;
-        const allAnswers = answers.map((answer, index) => ({
-            questionTitle: questions[index].title,
-            answer,
-            timeTaken,
-        }));
+        const timeTaken = (endTime - startTime) / 1000; // time taken in seconds
+        const currentAnswer = answers[currentPage];
+        const correctAnswer = questions[currentPage].correctAnswer;
 
-        const data = { username, UID, course, Department, Year, answers: allAnswers };
+        let updatedMarks = totalMarks;
+        if (currentAnswer === correctAnswer) {
+            updatedMarks += 1;
+        }
+        setTotalMarks(updatedMarks);
 
-        console.log('Submitting data:', JSON.stringify(data, null, 2)); // Log the data being sent
+        const updatedTimeTaken = [...timeTakenPerQuestion];
+        updatedTimeTaken[currentPage] = timeTaken;
+        setTimeTakenPerQuestion(updatedTimeTaken);
 
-        try {
-            await axios.post('https://boot-camp-server-chi.vercel.app/submit-test', data);
+        if (currentPage === questions.length - 1) {
+            const data = {
+                username,
+                UID,
+                course,
+                Department,
+                Year,
+                answers: answers.map((answer, index) => ({
+                    answer,
+                    marks: answer === questions[index].correctAnswer ? 1 : 0,
+                    timeTaken: timeTakenPerQuestion[index]
+                })),
+                totalMarks: updatedMarks,
+            };
+
+            try {
+                await axios.post('https://boot-camp-server-r1kd.vercel.app/submit-test', data);
                 setShowFeedback(true);
-
-        } catch (error) {
-            console.error('Error submitting test:', error);
+            } catch (error) {
+                console.error('Error submitting test:', error);
+            }
+        } else {
+            setStartTime(new Date()); // Reset start time for next question
+            handleNext();
         }
     };
 
     const handleFeedbackSubmit = async () => {
         try {
-            await axios.post('https://boot-camp-server-chi.vercel.app/submit-feedback', { username, UID, course, feedback, rating, Department, Year });
+            await axios.post('https://boot-camp-server-r1kd.vercel.app/submit-feedback', {
+                username,
+                UID,
+                course,
+                feedback,
+                rating,
+                Department,
+                Year,
+            });
             setShowFeedback(false);
             setFeedback('');
             setRating(0);
-            handleFeedbackSubmition();
+            handleFeedbackSubmission();
         } catch (error) {
             console.error('Error submitting feedback:', error);
         }
@@ -105,116 +139,10 @@ const QuestionPaper = () => {
                 <div>
                     {!submittedInfo ? (
                         <div className='formhandle'>
+                            <h1>Hey {username}, please start your course exam whenever you are ready.</h1>
                             <form onSubmit={handleInfoSubmit}>
-                                <label className='info'>
-                                    Username:
-                                    <input
-                                        type="text"
-                                        placeholder='Name'
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
-                                        className='input'
-                                        required
-                                    />
-                                </label>
-                                <br />
-                                <label className='info'>
-                                    UID:
-                                    <input
-                                        type="text"
-                                        placeholder='UID'
-                                        className='input'
-                                        value={UID}
-                                        onChange={(e) => setUID(e.target.value)}
-                                        required
-                                    />
-                                </label>
-                                <br />
-                                <label className='info'>
-                                    Course:
-                                    <select value={course} className='input' onChange={(e) => setCourse(e.target.value)} required>
-                                        <option value="">Select your course</option>
-                                        <option value="course1">Frontend</option>
-                                          <option value="course2">Backend</option>
-                                          <option value="course3">UI/UX</option>
-                                          <option value="course4">Trading</option>
-                                          <option value="course5">DSA</option>
-                                    </select>
-                                </label>
-                                <br />
-                                <label className='info'>
-                                    Department:
-                                    <select value={Department} className='input' onChange={(e) => setDepartment(e.target.value)} required>
-                                        <option value="">Select your Department</option>
-                                        <option value="department1">AU-1</option>
-              <option value="department2">AU-2</option>
-              <option value="department3">AU-3</option>
-              <option value="department4">AU-4</option>
-              <option value="department5">AU-5</option>
-              <option value="department6">Aerospace Engg.</option>
-              <option value="department7">CSE-AIT</option>
-              <option value="department8">Automobile Engg.</option>
-              <option value="department9">Biotech Engineering</option>
-              <option value="department10">Chemical Engg.</option>
-              <option value="department11">Civil Engg.</option>
-              <option value="department12">CSE 2nd year</option>
-              <option value="department13">CSE 3rd year</option>
-              <option value="department14">CSE 4th year</option>
-              <option value="department15">ECE</option>
-              <option value="department16">EE</option>
-              <option value="department17">Mechanical Engg.</option>
-              <option value="department18">Mechatronics</option>
-              <option value="department19">Petroleum</option>
-              <option value="department20">UIC</option>
-              <option value="department21">UILA</option>
-              <option value="department22">UILA(English)</option>
-              <option value="department23">UIFVA-Film Studies</option>
-              <option value="department24">UID-Fashion Design</option>
-              <option value="department25">UID-Fine Arts</option>
-              <option value="department26">UID-Industrial Design</option>
-              <option value="department27">UID-Interior Design</option>
-              <option value="department28">UIMS- Media Studies</option>
-              <option value="department29">UIA-Architecture</option>
-              <option value="department30">UITTR</option>
-              <option value="department31">UIFVA-Animation</option>
-              <option value="department32">USB-BBA</option>
-              <option value="department33">USB-Commerce</option>
-              <option value="department34">MBA-AIT</option>
-              <option value="department35">USB-MBA</option>
-              <option value="department36">UITHM-1st year HHM and culinary sciences</option>
-              <option value="department37">UITHM- RCM&REM</option>
-              <option value="department38">UITHM-TTM,MBA-THM, Ph.D</option>
-              <option value="department39">UITHM-AAM</option>
-              <option value="department40">LLB Program and LLM Program B.Com BA. LLB .</option>
-              <option value="department41">LLB Program</option>
-              <option value="department42">UIAHS-Nutrition & Optometry</option>
-              <option value="department43">UIAHS-MLT</option>
-              <option value="department44">UIAHS- FORENSIC SCIENCE</option>
-              <option value="department45">UIAHS-Physiotherapy</option>
-              <option value="department46">UIPS-Pharmacy</option>
-              <option value="department47">UIN-Nursing</option>
-              <option value="department48">UIAS</option>
-              <option value="department49">UIBT</option>
-              <option value="department50">UIS-Chemistry</option>
-              <option value="department51">UIS- Math</option>
-              <option value="department52">UIS-Physics</option>
-              <option value="department53">Biosciences</option>
-                                    </select>
-                                </label>
-                                <br />
-                                <label className='info'>
-                                    Year:
-                                    <select value={Year} className='input' onChange={(e) => setYear(e.target.value)} required>
-                                        <option value="">Select your Year</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
-                                        <option value="4">4</option>
-                                    </select>
-                                </label>
-                                <br />
-                                <div style={{alignItems:'center'}}>
-                                    <button type="submit" className='infobtn'>Submit</button>
+                                <div style={{ alignItems: 'center' }}>
+                                    <button type="submit" className='infobtn'>Start</button>
                                 </div>
                             </form>
                         </div>
@@ -224,14 +152,20 @@ const QuestionPaper = () => {
                                 <div className='questionbox'>
                                     <h2 className='questionTitle'>{currentQuestion.title}</h2>
                                     <p className='question'>{currentQuestion.description}</p>
-                                    <textarea
-                                        value={answers[currentPage]}
-                                        onChange={handleAnswerChange}
-                                        placeholder="Write your answer here..."
-                                        rows="4"
-                                        cols="50"
-                                        className='texts'
-                                    />
+                                    <div className='options'>
+                                        {[1, 2, 3, 4].map((option) => (
+                                            <label key={option}>
+                                                <input
+                                                    type="radio"
+                                                    name={`question-${currentPage}`}
+                                                    value={option}
+                                                    checked={answers[currentPage] === option.toString()}
+                                                    onChange={handleAnswerChange}
+                                                />
+                                                {currentQuestion[`option${option}`]}
+                                            </label>
+                                        ))}
+                                    </div>
                                     <div className="button-container">
                                         <div className='PositioningPrevious'>
                                             <button className="button-3d" onClick={handlePrevious} disabled={currentPage === 0}>
@@ -242,27 +176,15 @@ const QuestionPaper = () => {
                                                 <div className="button-base"></div>
                                             </button>
                                         </div>
-                                        {currentPage < questions.length - 1 ? (
-                                            <div className='PositioningNext'>
-                                                <button className="button-3d" onClick={handleNext}>
-                                                    <div className="button-top">
-                                                        <span className="material-icons">❯</span>
-                                                    </div>
-                                                    <div className="button-bottom"></div>
-                                                    <div className="button-base"></div>
-                                                </button>
-                                            </div>
-                                        ) : (
-                                            <div className='PositioningNext'>
-                                                <button className="button-3d" onClick={handleSubmit}>
-                                                    <div className="button-top">
-                                                        <span className="material-icons">❯</span>
-                                                    </div>
-                                                    <div className="button-bottom"></div>
-                                                    <div className="button-base"></div>
-                                                </button>
-                                            </div>
-                                        )}
+                                        <div className='PositioningNext'>
+                                            <button className="button-3d" onClick={handleSubmit}>
+                                                <div className="button-top">
+                                                    <span className="material-icons">❯</span>
+                                                </div>
+                                                <div className="button-bottom"></div>
+                                                <div className="button-base"></div>
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             ) : (
@@ -273,12 +195,13 @@ const QuestionPaper = () => {
                 </div>
             ) : (
                 <div className='feedback'>
+                    <h2>Total Marks: {totalMarks}</h2>
                     <h2>Feedback</h2>
                     <textarea
                         value={feedback}
                         onChange={(e) => setFeedback(e.target.value)}
                         placeholder="Write your feedback here..."
-                        style={{color:'black'}}
+                        style={{ color: 'black' }}
                         rows="4"
                         cols="50"
                     />
