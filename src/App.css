@@ -31,7 +31,7 @@
 .coloring {
   margin: 20px 0;
   font-family: sans-serif;
-  font-size: 5em;
+  font-size: 4em;
   font-weight: 900;
   text-transform: uppercase;
   color: transparent;
@@ -1097,9 +1097,9 @@ select:focus {
   border-radius: 10px 10px 8px 8px / 8px;
 }
 
-
-.PositioningPrevious{
+.PositioningNext{
   position: relative;
+  padding-left: 50px;
 }
 
 .PositioningNext{
@@ -1118,8 +1118,8 @@ select:focus {
   float: right;
   padding: 50px;
   position:relative;
-  height: 500px;
-  width: 700px;
+  height: 450px;
+  width: 500px;
   border-radius: 20px;
 }
 
@@ -1350,9 +1350,4 @@ svg {
     height: 20px; /* Even smaller height for screens 480px or less */
     width: 20px;  /* Even smaller width for screens 480px or less */
   }
-}
-
-.questionbox{
-position:relative;
-	right:300px
 }
