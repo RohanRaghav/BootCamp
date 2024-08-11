@@ -17,25 +17,38 @@ const Form = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    const data = { username, UID, course, Department, Year, PhNumber, Email };
+  const data = { username, UID, course, Department, Year, PhNumber, Email };
 
-    console.log('Submitting data:', JSON.stringify(data, null, 2));
-    sessionStorage.setItem('username',username);
-    sessionStorage.setItem('UID',UID);
-    sessionStorage.setItem('Course',course);
-    sessionStorage.setItem('Department',Department);
-    sessionStorage.setItem('Year',Year);
-    sessionStorage.setItem('PhNumber',PhNumber);
-    sessionStorage.setItem('Email',Email);
-    try {
-      await axios.post('https://boot-camp-server-chi.vercel.app/submit-info', data);
-      handleSubmition();
-    } catch (error) {
-      console.error('Error submitting form:', error);
+  console.log('Submitting data:', JSON.stringify(data, null, 2));
+  sessionStorage.setItem('username', username);
+  sessionStorage.setItem('UID', UID);
+  sessionStorage.setItem('Course', course);
+  sessionStorage.setItem('Department', Department);
+  sessionStorage.setItem('Year', Year);
+  sessionStorage.setItem('PhNumber', PhNumber);
+  sessionStorage.setItem('Email', Email);
+  
+  try {
+    await axios.post('https://boot-camp-server-chi.vercel.app/submit-info', data);
+    handleSubmition();
+  } catch (error) {
+    if (error.response) {
+      // Server responded with a status other than 2xx
+      console.error('Server error:', error.response.data);
+      console.error('Status code:', error.response.status);
+      console.error('Headers:', error.response.headers);
+    } else if (error.request) {
+      // No response received from server
+      console.error('No response received:', error.request);
+    } else {
+      // Something else happened while setting up the request
+      console.error('Error setting up request:', error.message);
     }
-  };
+  }
+};
+
   return (
     <div className="forming">
       <div className='formhandle'>
