@@ -16,7 +16,7 @@ const Submission = () => {
 
         try {
             // Send data to backend
-            await axios.post('https://boot-camp-server-r1kd.vercel.app/upload-assessment', formData);
+            await axios.post('https://boot-camp-server-chi.vercel.app/upload-assessment', formData);
 
             // Redirect to Google Drive after successful submission
             const driveLink = `https://drive.google.com/drive/folders/1I0ccrAIlhMQlb3JFqfREM0SF3offvSrS?usp=sharing`;
