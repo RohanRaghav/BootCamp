@@ -1,7 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../UserContext';
 
 const Form = () => {
   const [username, setUsername] = useState('');
@@ -12,10 +11,8 @@ const Form = () => {
   const [Department, setDepartment] = useState('');
   const [Year, setYear] = useState('');
   const navigate = useNavigate();
-  const { setUser } = useContext(UserContext);
 
   const handleSubmition = () => {
-    setUser({ username, UID, course, Department, Year, PhNumber, Email });
     navigate('/Choice');
   };
 
