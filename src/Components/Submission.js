@@ -23,6 +23,7 @@ const Submission = () => {
         }
 
         const formData = new FormData();
+        console.log(username);
         formData.append('file', file);
         formData.append('day', parseInt(day.match(/\d+/)[0], 10)); // Convert 'Day 1' to 1
         formData.append('username', username);
