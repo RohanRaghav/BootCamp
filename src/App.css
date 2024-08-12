@@ -1135,15 +1135,7 @@ select:focus {
   border-radius: 10px 10px 8px 8px / 8px;
 }
 
-.PositioningNext{
-  position: relative;
-  padding-left: 50px;
-}
 
-.PositioningNext{
-  position: relative;
-  padding-left: 200px;
-}
 
 .questionTitle{
   font-size: 2em;
