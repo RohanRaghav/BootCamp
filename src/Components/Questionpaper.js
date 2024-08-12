@@ -170,8 +170,7 @@ const QuestionPaper = () => {
                                      {currentQuestion[`option${option}`]}
                                    </label>
                                  ))}
-                               </div>                             
-                                    <div className="button-container">
+                                       <div className="button-container">
                                         <div className='PositioningPrevious'>
                                             <button className="button-3d" onClick={handlePrevious} disabled={currentPage === 0}>
                                                 <div className="button-top">
@@ -192,7 +191,8 @@ const QuestionPaper = () => {
                                         </div>
                                     </div>
                                 </div>
-                            ) : (
+
+                               </div>                                                         ) : (
                                 <p>Loading questions...</p>
                             )}
                         </div>
