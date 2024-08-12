@@ -3,7 +3,7 @@ import React from 'react'
 const Revision = () => {
   return (
     <div>
-      abc
+      Not available right now
     </div>
   )
 }
