@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 const Submission = () => {
     const [selectedFiles, setSelectedFiles] = useState({});
@@ -21,34 +20,40 @@ const Submission = () => {
             return;
         }
 
-        const formData = new FormData();
-        formData.append('day', parseInt(day.match(/\d+/)[0], 10)); // Convert 'Day 1' to 1
-        formData.append('username', username);
-        formData.append('UID', UID);
-        formData.append('file', file); // Append the file to the form data
-        const day = parseInt(day.match(/\d+/)[0], 10);
-        try {
-                    const response = await fetch('https://boot-camp-server-chi.vercel.app/upload-assessment', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            username: username,
-                            UID: UID,
-                            day: day,
-                            file: `data:${file.type};base64,${fileBase64}`
-                        })
-                     });
+        const reader = new FileReader();
+        reader.onload = async function () {
+            const fileBase64 = reader.result.split(',')[1];
+            try {
+                const response = await fetch('https://boot-camp-server-chi.vercel.app/upload-assessment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        UID: UID,
+                        day: parseInt(day.match(/\d+/)[0], 10),
+                        file: `data:${file.type};base64,${fileBase64}`
+                    })
+                });
 
-            console.log('File uploaded successfully:', response.data);
-            alert('File uploaded successfully!');
-            setSelectedFiles(prevState => ({ ...prevState, [day]: null }));
+                if (response.ok) {
+                    const data = await response.text(); 
+                    console.log('File uploaded successfully:', data);
+                    alert('File uploaded successfully!');
+                    setSelectedFiles(prevState => ({ ...prevState, [day]: null }));
+                } else {
+                    const text = await response.text();
+                    console.error('Error submitting assessment:', text);
+                    alert(`Error submitting assessment: ${text}`);
+                }
+            } catch (error) {
+                console.error('Error submitting assessment:', error.message);
+                alert('Error submitting assessment. Please try again.');
+            }
+        };
 
-        } catch (error) {
-            console.error('Error submitting assessment:', error.response ? error.response.data : error.message);
-            alert('Error submitting assessment. Please try again.');
-        }
+        reader.readAsDataURL(file);
     };
 
     return (
