@@ -25,7 +25,8 @@ const Choice = () => {
         <ul>
           {notifications.map((notification) => (
             <li key={notification._id}>
-              <p>{notification.message}</p>
+	<p>{notification.title}</p>
+              <p>{notification.content}</p>
               <small>{new Date(notification.timestamp).toLocaleString()}</small>
             </li>
           ))}
