@@ -26,13 +26,20 @@ const Submission = () => {
         formData.append('username', username);
         formData.append('UID', UID);
         formData.append('file', file); // Append the file to the form data
-
+        const day = parseInt(day.match(/\d+/)[0], 10);
         try {
-            const response = await axios.post('https://boot-camp-server-chi.vercel.app/upload-assessment', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+                    const response = await fetch('https://boot-camp-server-chi.vercel.app/upload-assessment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            username: username,
+                            UID: UID,
+                            day: day,
+                            file: `data:${file.type};base64,${fileBase64}`
+                        })
+                     });
 
             console.log('File uploaded successfully:', response.data);
             alert('File uploaded successfully!');
