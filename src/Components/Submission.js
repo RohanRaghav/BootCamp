@@ -17,6 +17,7 @@ const Submission = () => {
 
         if (!file) {
             console.error('No file selected for upload');
+            alert('Please select a file to upload.');
             return;
         }
 
@@ -28,17 +29,20 @@ const Submission = () => {
 
         try {
             // Send data to backend
-            const response = await axios.post('https://boot-camp-server-chi.vercel.app/upload-assessment', formData, {
+            const response = await axios.post('http://localhost:3001/api/upload-assessment', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
 
             console.log('File uploaded successfully:', response.data);
-            // You can add a notification or message here to inform the user of a successful upload.
+            alert('File uploaded successfully!');
+            // Optionally clear the file selection after successful upload
+            setSelectedFiles(prevState => ({ ...prevState, [day]: null }));
 
         } catch (error) {
             console.error('Error submitting assessment:', error.response ? error.response.data : error.message);
+            alert('Error submitting assessment. Please try again.');
         }
     };
 
