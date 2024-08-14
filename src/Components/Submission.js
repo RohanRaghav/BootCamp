@@ -29,7 +29,7 @@ const Submission = () => {
 
         try {
             // Send data to backend
-            const response = await axios.post('https://boot-camp-server-chi.vercel.app/api/upload-assessment', formData, {
+            const response = await axios.post('https://boot-camp-server-chi.vercel.app/upload-assessment', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
