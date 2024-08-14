@@ -28,8 +28,7 @@ const Submission = () => {
         formData.append('file', file); // Append the file to the form data
 
         try {
-            // Send data to backend
-            const response = await axios.post('https://boot-camp-server-chi.vercel.app/upload-assessment', formData, {
+            const response = await axios.post('https://boot-camp-server-chi.vercel.app/api/upload-assessment', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -37,7 +36,6 @@ const Submission = () => {
 
             console.log('File uploaded successfully:', response.data);
             alert('File uploaded successfully!');
-            // Optionally clear the file selection after successful upload
             setSelectedFiles(prevState => ({ ...prevState, [day]: null }));
 
         } catch (error) {
@@ -53,7 +51,7 @@ const Submission = () => {
                 {['Day 1', 'Day 2', 'Day 3'].map((day, index) => (
                     <div key={index} className="submission-slot">
                         <h3>{day} Assessments</h3>
-                        <form onSubmit={(e) => handleSubmit(e, day)} encType='multipart/form-data'>
+                        <form onSubmit={(e) => handleSubmit(e, day)}>
                             <label>
                                 Upload your assessment:
                                 <input 
